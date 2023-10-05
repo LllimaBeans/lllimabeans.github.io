@@ -1,8 +1,9 @@
 # Laura's CS30 stuff
 
 ## Demos
-
+- [Ball Object](03-ballObject)
 - [Bouncing Ball](01-ball)
 
 ## Projects
 
+- [Scene Assignment](02-scene)
