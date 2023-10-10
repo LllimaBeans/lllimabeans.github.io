@@ -7,3 +7,4 @@
 ## Projects
 
 - [Scene Assignment](02-scene)
+- [Arrays and Object Notation Assignment](04-array)
