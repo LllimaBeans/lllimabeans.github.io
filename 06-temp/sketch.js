@@ -1,6 +1,7 @@
 // Perlin Noise Ball
 
 let ballArray = [];
+let gravity = createVector(0, 0.9);
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
