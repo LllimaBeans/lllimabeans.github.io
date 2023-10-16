@@ -5,15 +5,13 @@
 // Extra for Experts:
 // I tried to learn how to use vectors. I haven't taken physics yet so I had chatGPT help me with the math of it
 
-// Noise --> make particles move randomly OR use vectors
+// use vectors
 //      vectors can be extra for experts, noise can't
 // Randomize colours to an extent? maybe give choice
 // click mouse to change particle type/size
-// use translate to make origin middle and make a mirrored mode, like the gamres
+// use translate to make origin middle and make a mirrored mode, like the games
 
-let radius;
 let holder = [];
-
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -21,42 +19,75 @@ function setup() {
 
 function draw() {
   background(220);
+  displayParticle();
 }
 
+// Display the particles
 function displayParticle() {
-  for (let theBall of holder) {
-    fill(theBall.color);
-    
-    theBall.x = noise(theBall.time) * width;
-    theBall.y = noise(theBall.time + 300) * height;
-  
-    circle(theBall.x, theBall.y, theBall.size);
-  
-    theBall.time += 0.01;
+  for (let particle of holder) {
+    fill(particle.color);
+    circle(particle.x, particle.y, particle.size);
   }
 }
 
+// Set origin to the centre of the page
 function layout() {
-  // Save the matix thing and set origin to the middle of the page
-  push();
   translate(width/2, height/2);
 }
 
 // Creating individual particles
 function spawnParticle() {
-  let tempObject = {
-    x: random(width),
-    y: random(height),
-    r: random(0, 255),
-    g: random(0, 255),
-    b: random(0, 255),
+  let particle = {
+    x: random(1, 30),
+    y: random(1, 30),
+    color: color(random(255), random(255), random(255), random(255)),
     dx: random(-10, 10),
     dy: random(-10, 10),
   };
+  holder.push(particle);
 }
 
 // Display particles on mouse click
 function mousePressed() {
-  // spawnParticle();
+  spawnParticle();
+  // for (let i = 100; i > 0; i--){
+  //   spawnParticle();
+
+  // }
+}
+
+function horizontalMirror() {
+
+}
+
+function verticalMirror() {
+
+}
+
+function quadrantalMirror(){
+
+}
+
+function resetMirror(){
+
+}
+
+function keyPressed() {
+  // if h (72) is pressed, a horizontal mirror will appear
+  if (keyCode === 72){
+  // horizontalMirror();
+  }
+  // if v (86) is pressed, a vertical mirror will appear
+  if (keyCode === 86){
+    // verticalMirror();
+  }
+  // if a (65) is pressed, both mirrors will happen at once
+  if (keyCode === 65){
+    // quadrantalMirror();
+  }
+  // if r (82) is pressed, all mirroring is removed
+  if (keyCode === 82){
+    // resetMirror();
+  }
 }
 
