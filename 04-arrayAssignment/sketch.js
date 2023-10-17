@@ -12,6 +12,8 @@
 // use translate to make origin middle and make a mirrored mode, like the games
 
 let holder = [];
+let horizontalMirroring = false;
+let verticalMirroring = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -75,19 +77,20 @@ function resetMirror(){
 function keyPressed() {
   // if h (72) is pressed, a horizontal mirror will appear
   if (keyCode === 72){
-  // horizontalMirror();
+    horizontalMirroring = !horizontalMirroring;
   }
   // if v (86) is pressed, a vertical mirror will appear
   if (keyCode === 86){
-    // verticalMirror();
+    verticalMirroring = !verticalMirroring;
   }
   // if a (65) is pressed, both mirrors will happen at once
   if (keyCode === 65){
-    // quadrantalMirror();
+    horizontalMirroring = !horizontalMirroring;
+    verticalMirroring = !verticalMirroring;
   }
   // if r (82) is pressed, all mirroring is removed
   if (keyCode === 82){
-    // resetMirror();
+    horizontalMirroring = !horizontalMirroring;
   }
 }
 
