@@ -5,6 +5,7 @@
 - [Bouncing Ball](01-ball)
 - [Ball Array](05-ballArray)
 - [temp](06-temp)
+- [Sounds and Images](07-sound)
 
 ## Projects
 

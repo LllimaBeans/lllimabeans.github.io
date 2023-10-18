@@ -14,13 +14,17 @@
 let holder = [];
 let horizontalMirroring = false;
 let verticalMirroring = false;
+let oppositeCornerMirroring = false;
+let gravity, sliderBgColor, sliderR, sliderG, sliderB;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  gravity = createVector(0, 1);
+  variousSliders();
 }
 
 function draw() {
-  background(220);
+  background(sliderBgColor.value());
   displayParticle();
 }
 
@@ -28,23 +32,53 @@ function draw() {
 function displayParticle() {
   for (let particle of holder) {
     fill(particle.color);
+    particle.dy += gravity.y;
     circle(particle.x, particle.y, particle.size);
+  }
+  if (horizontalMirroring === true){
+    for (let particle of holder) {
+      fill(particle.color);
+      particle.dy += gravity.y;
+      circle(width - particle.x, particle.y, particle.size);
+    }
+  }
+  if (verticalMirroring === true){
+    for (let particle of holder) {
+      fill(particle.color);
+      particle.dy += gravity.y;
+      circle(particle.x, height - particle.y, particle.size);
+    }
+  }
+  if (oppositeCornerMirroring === true){
+    for (let particle of holder) {
+      fill(particle.color);
+      particle.dy += gravity.y;
+      circle(width - particle.x, height - particle.y, particle.size);
+    }
   }
 }
 
-// Set origin to the centre of the page
-function layout() {
-  translate(width/2, height/2);
+function variousSliders() {
+  sliderBgColor = createSlider(0, 255, 60, 5);
+  sliderBgColor.position(10, 10);
+  sliderBgColor.style("width", "400px");
+  sliderR = createSlider(0, 255, 60, 5);
+  sliderR.position(10, 10);
+  sliderG = createSlider(0, 255, 60, 5);
+  sliderG.position(10, 10);
+  sliderB = createSlider(0, 255, 60, 5);
+  sliderB.position(10, 10);
 }
 
 // Creating individual particles
 function spawnParticle() {
   let particle = {
-    x: random(1, 30),
-    y: random(1, 30),
+    x: mouseX,
+    y: mouseY,
     color: color(random(255), random(255), random(255), random(255)),
     dx: random(-10, 10),
     dy: random(-10, 10),
+    size: random(1, 10),
   };
   holder.push(particle);
 }
@@ -52,26 +86,6 @@ function spawnParticle() {
 // Display particles on mouse click
 function mousePressed() {
   spawnParticle();
-  // for (let i = 100; i > 0; i--){
-  //   spawnParticle();
-
-  // }
-}
-
-function horizontalMirror() {
-
-}
-
-function verticalMirror() {
-
-}
-
-function quadrantalMirror(){
-
-}
-
-function resetMirror(){
-
 }
 
 function keyPressed() {
@@ -83,14 +97,17 @@ function keyPressed() {
   if (keyCode === 86){
     verticalMirroring = !verticalMirroring;
   }
-  // if a (65) is pressed, both mirrors will happen at once
+  // if a (65) is pressed, a mirror will happen in every quadrant
   if (keyCode === 65){
-    horizontalMirroring = !horizontalMirroring;
-    verticalMirroring = !verticalMirroring;
+    horizontalMirroring = true;
+    verticalMirroring = true;
+    oppositeCornerMirroring = true;
   }
   // if r (82) is pressed, all mirroring is removed
   if (keyCode === 82){
-    horizontalMirroring = !horizontalMirroring;
+    verticalMirroring = false;
+    horizontalMirroring = false;
+    oppositeCornerMirroring = false;
   }
 }
 
