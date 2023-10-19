@@ -1,20 +1,17 @@
 // Arrays and Object Notation Assignment
 // Laura Lima
-// date
+// Thursday, October 10th
 //
 // Extra for Experts:
 // I tried to learn how to use vectors. I haven't taken physics yet so I had chatGPT help me with the math of it
 
 // use vectors
-//      vectors can be extra for experts, noise can't
-// Randomize colours to an extent? maybe give choice
-// click mouse to change particle type/size
-// use translate to make origin middle and make a mirrored mode, like the games
 
+// Global variables
 let holder = [];
 let horizontalMirroring = false;
 let verticalMirroring = false;
-let oppositeCornerMirroring = false;
+let oppCornerMirroring = false;
 let gravity, sliderBgColor, sliderR, sliderG, sliderB;
 
 function setup() {
@@ -24,53 +21,54 @@ function setup() {
 }
 
 function draw() {
-  background(sliderBgColor.value());
+  background(sliderR.value(), sliderG.value(), sliderB.value());
   displayParticle();
 }
 
 // Display the particles
 function displayParticle() {
+  // Making particles where mouse is
   for (let particle of holder) {
     fill(particle.color);
-    particle.dy += gravity.y;
     circle(particle.x, particle.y, particle.size);
   }
+  // Mirroring particles across the y-axis if horizontalMirroring is true
   if (horizontalMirroring === true){
     for (let particle of holder) {
       fill(particle.color);
-      particle.dy += gravity.y;
       circle(width - particle.x, particle.y, particle.size);
     }
   }
+  // Mirroring particles across the x-axis if verticalMirroring is true
   if (verticalMirroring === true){
     for (let particle of holder) {
       fill(particle.color);
-      particle.dy += gravity.y;
       circle(particle.x, height - particle.y, particle.size);
     }
   }
-  if (oppositeCornerMirroring === true){
+  // Mirroring particles in the quadrant diagonal if oppCornerMirroring is true
+  if (oppCornerMirroring === true){
     for (let particle of holder) {
       fill(particle.color);
-      particle.dy += gravity.y;
       circle(width - particle.x, height - particle.y, particle.size);
     }
   }
 }
 
+// Making the sliders that are for changing the background
 function variousSliders() {
-  sliderBgColor = createSlider(0, 255, 60, 5);
-  sliderBgColor.position(10, 10);
-  sliderBgColor.style("width", "400px");
   sliderR = createSlider(0, 255, 60, 5);
   sliderR.position(10, 10);
+  sliderR.style("width", "400px");
   sliderG = createSlider(0, 255, 60, 5);
-  sliderG.position(10, 10);
+  sliderG.position(10, 35);
+  sliderG.style("width", "400px");
   sliderB = createSlider(0, 255, 60, 5);
-  sliderB.position(10, 10);
+  sliderB.position(10, 60);
+  sliderB.style("width", "400px");
 }
 
-// Creating individual particles
+// Creating individual particles and adding them to array
 function spawnParticle() {
   let particle = {
     x: mouseX,
@@ -89,25 +87,29 @@ function mousePressed() {
 }
 
 function keyPressed() {
-  // if h (72) is pressed, a horizontal mirror will appear
+  // If h (72) is pressed, the horizontal mirror will change
   if (keyCode === 72){
     horizontalMirroring = !horizontalMirroring;
   }
-  // if v (86) is pressed, a vertical mirror will appear
+  // If v (86) is pressed, the vertical mirror will change
   if (keyCode === 86){
     verticalMirroring = !verticalMirroring;
   }
-  // if a (65) is pressed, a mirror will happen in every quadrant
+  // If o (79) is pressed, the opposite corner mirror will change
+  if (keyCode === 86){
+    oppCornerMirroring = !oppCornerMirroring;
+  }
+  // If a (65) is pressed, the mirroring appears in every quadrant
   if (keyCode === 65){
     horizontalMirroring = true;
     verticalMirroring = true;
-    oppositeCornerMirroring = true;
+    oppCornerMirroring = true;
   }
-  // if r (82) is pressed, all mirroring is removed
+  // If r (82) is pressed, all mirroring is removed
   if (keyCode === 82){
     verticalMirroring = false;
     horizontalMirroring = false;
-    oppositeCornerMirroring = false;
+    oppCornerMirroring = false;
   }
 }
 
