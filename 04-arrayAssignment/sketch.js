@@ -3,10 +3,13 @@
 // Thursday, October 10th
 //
 // Extra for Experts:
-// I used sliders to change the background colour
+// I used a vector to give the particles a sense of gravity
+// Haven't taken physics yet so chatGPT was used to figure out the logic in the
+// updateParticles for loop because I wasn't able to figure it out, vectors are hard
+// I also used sliders to change the background colour
 // From top to bottom the sliders change r, g, and b values
 // 
-// In the assignment I've made it so small balls appear where you click the mouse
+// In the assignment I've made it so that 15 small balls appear where you click the mouse
 // By pressing h, v, a, o, or r you can make the balls show up and/or 
 // stop mirroring across different axis's
 
@@ -19,7 +22,7 @@ let gravity, sliderBgColor, sliderR, sliderG, sliderB;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  gravity = createVector(0, 0.3);
+  gravity = createVector(0, 0.1);
   variousSliders();
 }
 
@@ -74,7 +77,7 @@ function variousSliders() {
 
 // Makes and adds 10 particles on every mouse click
 function spawnParticle() {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 15; i++) {
     let particle = {
       x: mouseX + random(-20, 20),
       y: mouseY + random(-20, 20),
