@@ -101,7 +101,6 @@ function updateParticles() {
     particle.x += particle.dx;
     particle.y += particle.dy;
     particle.dy += gravity.y; 
-    }
   }
 }
 
