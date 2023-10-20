@@ -3,9 +3,12 @@
 // Thursday, October 10th
 //
 // Extra for Experts:
-// I tried to learn how to use vectors. I haven't taken physics yet so I had chatGPT help me with the math of it
-
-// use vectors
+// I used sliders to change the background colour
+// From top to bottom the sliders change r, g, and b values
+// 
+// In the assignment I've made it so small balls appear where you click the mouse
+// By pressing h, v, a, o, or r you can make the balls show up and/or 
+// stop mirroring across different axis's
 
 // Global variables
 let holder = [];
