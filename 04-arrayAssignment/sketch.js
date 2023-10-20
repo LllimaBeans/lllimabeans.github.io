@@ -19,13 +19,14 @@ let gravity, sliderBgColor, sliderR, sliderG, sliderB;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  gravity = createVector(0, 1);
+  gravity = createVector(0, 0.3);
   variousSliders();
 }
 
 function draw() {
   background(sliderR.value(), sliderG.value(), sliderB.value());
   displayParticle();
+  updateParticles();
 }
 
 // Display the particles
@@ -71,22 +72,34 @@ function variousSliders() {
   sliderB.style("width", "400px");
 }
 
-// Creating individual particles and adding them to array
+// Makes and adds 10 particles on every mouse click
 function spawnParticle() {
-  let particle = {
-    x: mouseX,
-    y: mouseY,
-    color: color(random(255), random(255), random(255), random(255)),
-    dx: random(-10, 10),
-    dy: random(-10, 10),
-    size: random(1, 10),
-  };
-  holder.push(particle);
+  for (let i = 0; i < 10; i++) {
+    let particle = {
+      x: mouseX + random(-20, 20),
+      y: mouseY + random(-20, 20),
+      color: color(random(255), random(255), random(255), random(255)),
+      dx: random(-10, 10),
+      dy: random(-10, 10),
+      size: random(1, 10),
+    };
+    holder.push(particle);
+  }
 }
 
 // Display particles on mouse click
 function mousePressed() {
   spawnParticle();
+}
+
+function updateParticles() {
+  for (let i = holder.length - 1; i >= 0; i--) {
+    let particle = holder[i];
+    particle.x += particle.dx;
+    particle.y += particle.dy;
+    particle.dy += gravity.y; 
+    }
+  }
 }
 
 function keyPressed() {
