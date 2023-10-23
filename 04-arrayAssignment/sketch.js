@@ -3,9 +3,15 @@
 // Thursday, October 10th
 //
 // Extra for Experts:
-// I tried to learn how to use vectors. I haven't taken physics yet so I had chatGPT help me with the math of it
-
-// use vectors
+// I used a vector to give the particles a sense of gravity
+// Haven't taken physics yet so chatGPT was used to figure out the logic in the
+// updateParticles for loop because I wasn't able to figure it out, vectors are hard
+// I also used sliders to change the background colour
+// From top to bottom the sliders change r, g, and b values
+// 
+// In the assignment I've made it so that 15 small balls appear where you click the mouse
+// By pressing h, v, a, o, or r you can make the balls show up and/or 
+// stop mirroring across different axis's
 
 // Global variables
 let holder = [];
@@ -16,13 +22,14 @@ let gravity, sliderBgColor, sliderR, sliderG, sliderB;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  gravity = createVector(0, 1);
+  gravity = createVector(0, 0.1);
   variousSliders();
 }
 
 function draw() {
   background(sliderR.value(), sliderG.value(), sliderB.value());
   displayParticle();
+  updateParticles();
 }
 
 // Display the particles
@@ -68,22 +75,33 @@ function variousSliders() {
   sliderB.style("width", "400px");
 }
 
-// Creating individual particles and adding them to array
+// Makes and adds 10 particles on every mouse click
 function spawnParticle() {
-  let particle = {
-    x: mouseX,
-    y: mouseY,
-    color: color(random(255), random(255), random(255), random(255)),
-    dx: random(-10, 10),
-    dy: random(-10, 10),
-    size: random(1, 10),
-  };
-  holder.push(particle);
+  for (let i = 0; i < 15; i++) {
+    let particle = {
+      x: mouseX + random(-20, 20),
+      y: mouseY + random(-20, 20),
+      color: color(random(255), random(255), random(255), random(255)),
+      dx: random(-10, 10),
+      dy: random(-10, 10),
+      size: random(1, 10),
+    };
+    holder.push(particle);
+  }
 }
 
 // Display particles on mouse click
 function mousePressed() {
   spawnParticle();
+}
+
+function updateParticles() {
+  for (let i = holder.length - 1; i >= 0; i--) {
+    let particle = holder[i];
+    particle.x += particle.dx;
+    particle.y += particle.dy;
+    particle.dy += gravity.y; 
+  }
 }
 
 function keyPressed() {
