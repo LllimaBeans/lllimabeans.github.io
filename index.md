@@ -7,6 +7,7 @@
 - [temp](06-temp)
 - [Sounds and Images](07-sound)
 - [Terrian Gen](08-terrian)
+- [2D Array](09-grid)
 
 ## Projects
 
