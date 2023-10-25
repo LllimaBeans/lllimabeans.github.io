@@ -4,7 +4,7 @@
 
 let grid;
 let cellSize;
-const GRID_SIZE = 1200;
+const GRID_SIZE = 15;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -60,6 +60,18 @@ function genRandomGrid(cols, rows) {
   return randomArray;
 }
 
+function mousePressed() {
+  let y = Math.floor(mouseY/cellSize);
+  let x = Math.floor(mouseX/cellSize);
+
+  if (grid[y][x] === 0){
+    grid[y][x] = 1;
+  }
+  else if (grid[y][x] === 1){
+    grid[y][x] = 0;
+  }
+}
+
 function genEmptyGrid(cols, rows) {
   let randomArray = [];
   for (let y = 0; y < cols; y++) {
@@ -69,8 +81,4 @@ function genEmptyGrid(cols, rows) {
     }
   }
   return randomArray;
-}
-
-function mousePressed() {
-
 }
