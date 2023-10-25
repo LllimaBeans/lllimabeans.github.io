@@ -30,7 +30,8 @@ function displayGrid() {
       }
       if (grid[y][x] === 1){
         fill("black");
-      }      rect(x * cellSize, y * cellSize, cellSize, cellSize);
+      }      
+      rect(x * cellSize, y * cellSize, cellSize, cellSize);
     }
   }
 }
