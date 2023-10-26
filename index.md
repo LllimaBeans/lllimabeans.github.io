@@ -9,6 +9,7 @@
 - [Terrian Gen](08-terrian)
 - [2D Array](09-grid)
 - [Grid neighbours](10-neighbours)
+- [Game of Life](11-life)
 ## Projects
 
 - [Scene Assignment](02-scene)
