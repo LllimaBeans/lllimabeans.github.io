@@ -1,7 +1,7 @@
 // Game of Life
 
 let grid;
-const GRID_SIZE = 30;
+const GRID_SIZE = 4;
 let cellSize;
 
 function setup() {

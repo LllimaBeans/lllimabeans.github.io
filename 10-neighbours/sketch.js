@@ -1,7 +1,7 @@
 // 2D Grid Neighbours
 
 let grid;
-const GRID_SIZE = 10;
+const GRID_SIZE = 4;
 let cellSize;
 
 function setup() {
