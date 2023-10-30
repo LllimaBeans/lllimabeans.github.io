@@ -10,6 +10,7 @@
 - [2D Array](09-grid)
 - [Grid neighbours](10-neighbours)
 - [Game of Life](11-life)
+- [Character in Grid](13-character)
 ## Projects
 
 - [Scene Assignment](02-scene)
