@@ -34,8 +34,7 @@ function mousePressed() {
 }
 
 function changeColour() {
-  // change colour guess on mouse click
-  // make colour menu? decide later
+  // change colour or hold the colours
 }
 
 function genGrid() {
@@ -50,4 +49,9 @@ function keyPressed() {
   if (key === " "){
     // enter guess
   }
+}
+
+function mouseClicked() {
+  // when a colour is pressed have the mouse "hold" the colour, set image x,y to mouse
+  // when mouse clicked set cell guess to colour mouse was holding
 }
