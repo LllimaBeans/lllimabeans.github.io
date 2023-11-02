@@ -3,12 +3,15 @@
 // Date
 //
 // Extra for Experts:
-// :(
+// HOW DOES ONE MAKE MASTERMIND EXTRA
+// TITLE SCREEN MAYBE???????????
+// Actually yeah title screen might be good
 
 let grid;
 let cellSize;
 const CELL_NUMBER = 6;
 let colourList = ["red", "yellow", "green", "blue", "purple"];
+let selectedColour;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -32,6 +35,20 @@ function mousePressed() {
   let x = Math.floor(mouseX/cellSize);
 
   changeColour(x, y);   //current cell
+
+  
+  if (y === 0) {
+    // Handle color selection when clicking the top row
+    let colorIndex = Math.floor(x);
+    if (colorIndex < colourList.length) {
+      selectedColour = colourList[colorIndex];
+    }
+    else {
+      changeColour(x, y, selectedColour); // Change the color of the clicked cell
+    }
+  }
+
+
 
   // when a colour is pressed have the mouse "hold" the colour, set coloured circle x,y to mouse location
   // when mouse clicked set cell guess to colour mouse was holding, make mouse stop holdingg the coloured circle
