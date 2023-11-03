@@ -1,13 +1,13 @@
 // Game of Life
 
 let grid;
-const GRID_SIZE = 40;
+const GRID_SIZE = 20;
 let cellSize;
 let playerX = 0;
 let playerY = 0;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth * 0.8, windowHeight * 0.8);
   grid = generateRandomGrid(GRID_SIZE, GRID_SIZE);
 
   // put player in grid

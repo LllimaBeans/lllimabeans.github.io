@@ -6,7 +6,7 @@ let cellSize;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  grid = generateEmptyGrid(GRID_SIZE, GRID_SIZE);
+  grid = generateRandomGrid(GRID_SIZE, GRID_SIZE);
 
   if (height > width) {
     cellSize = width/GRID_SIZE;

@@ -11,8 +11,8 @@
 - [Grid neighbours](10-neighbours)
 - [Game of Life](11-life)
 - [Character in Grid](13-character)
-## Projects
 
+## Projects
 - [Scene Assignment](02-scene)
 - [Arrays and Object Notation Assignment](04-arrayAssignment)
 - [Grid Assignment](12-gridAssignment)

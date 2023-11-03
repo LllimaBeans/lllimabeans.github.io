@@ -36,20 +36,6 @@ function mousePressed() {
 
   changeColour(x, y);   //current cell
 
-  
-  if (y === 0) {
-    // Handle color selection when clicking the top row
-    let colorIndex = Math.floor(x);
-    if (colorIndex < colourList.length) {
-      selectedColour = colourList[colorIndex];
-    }
-    else {
-      changeColour(x, y, selectedColour); // Change the color of the clicked cell
-    }
-  }
-
-
-
   // when a colour is pressed have the mouse "hold" the colour, set coloured circle x,y to mouse location
   // when mouse clicked set cell guess to colour mouse was holding, make mouse stop holdingg the coloured circle
 }
@@ -80,7 +66,7 @@ function displayGrid() {
     for (let x = 0; x < CELL_NUMBER; x++) {
       
       // colours and whatnot can be changed in here
-
+      fill("blue");
       rect(x*cellSize, y*cellSize, cellSize, cellSize);
     }
   }
