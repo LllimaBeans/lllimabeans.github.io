@@ -59,6 +59,10 @@ function makeRandomCode() {
   // hide the code from the player
 }
 
+function displayBackground() {
+  // Make brown rectangle as background, have it be vertically longer rather than horizontally 
+}
+
 function displayGrid() {
   // alter the empty grid created in genGrid() to make it look like a mastermind game
   // Use the following 2D array format to make all grid like-structures, including the guessing of colours
@@ -73,7 +77,16 @@ function displayGrid() {
 }
 
 function genGrid() {
-  // actually make grid here
+  function generateEmptyGrid(cols, rows) {
+    let newGrid = [];
+    for (let y = 0; y < rows; y++) {
+      newGrid.push([]);
+      for (let x = 0; x < cols; x++) {
+        newGrid[y].push(0);
+      }
+    }
+    return newGrid;
+  }
 
   // call this somewhere in this function 
   makeRandomCode();
