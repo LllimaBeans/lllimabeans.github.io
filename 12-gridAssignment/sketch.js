@@ -10,84 +10,121 @@
 let grid;
 let cellSize;
 const CELL_NUMBER = 6;
-let colourList = ["red", "yellow", "green", "blue", "purple"];
-let selectedColour;
+let colourList = ["red", "yellow", "green", "blue", "purple", "orange", "pink", "brown"];
+let currentRow = 0;
+let codeToGuess = [];
+let guessGrid = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  grid = genGrid(CELL_NUMBER, CELL_NUMBER);
+  grid = generateEmptyGrid(CELL_NUMBER, CELL_NUMBER);
 
   if (height > width) {
-    cellSize = width/CELL_NUMBER;
-  }
+    cellSize = width / CELL_NUMBER;
+  } 
   else {
-    cellSize = height/CELL_NUMBER;
+    cellSize = height / CELL_NUMBER;
   }
 }
 
 function draw() {
   background(220);
   displayGrid();
+  displayGuessGrid();
 }
 
 function mousePressed() {
-  let y = Math.floor(mouseY/cellSize);
-  let x = Math.floor(mouseX/cellSize);
+  if (currentRow < CELL_NUMBER) {
+    let y = Math.floor(mouseY / cellSize);
+    let x = Math.floor(mouseX / cellSize);
 
-  changeColour(x, y);   //current cell
-
-  // when a colour is pressed have the mouse "hold" the colour, set coloured circle x,y to mouse location
-  // when mouse clicked set cell guess to colour mouse was holding, make mouse stop holdingg the coloured circle
-}
-
-function changeColour() {
-  // change colour to what colour of circle the mouse has selected
-}
-
-function drawCircle() {
-  // display chosen circle on box
+    changeColour(x, y, currentRow);
+  }
 }
 
 function keyPressed() {
-  if (key === " "){
-    // enter guess
+  if (key === " " && currentRow < CELL_NUMBER) {
+    // Enter guess
+    if (guessGrid[currentRow].length === CELL_NUMBER) {
+      currentRow++;
+      if (currentRow === CELL_NUMBER) {
+        checkGuess();
+      }
+    }
   }
+}
+
+function changeColour(x, y, row) {
+  // Change colour to what colour of circle the mouse has selected
+  if (x < CELL_NUMBER && y === 0) {
+    guessGrid[row][x] = colourList[0];
+  }
+}
+
+function drawCircle(x, y, colour) {
+  fill(colour);
+  ellipse(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, cellSize);
 }
 
 function makeRandomCode() {
-  // generate the random colour code, 4 random colours
-  // hide the code from the player
-}
-
-function displayBackground() {
-  // Make brown rectangle as background, have it be vertically longer rather than horizontally 
+  // Generate the 4 random colours
+  for (let i = 0; i < CELL_NUMBER; i++) {
+    let randomColor = random(colourList);
+    codeToGuess.push(randomColor);
+  }
 }
 
 function displayGrid() {
-  // alter the empty grid created in genGrid() to make it look like a mastermind game
-  // Use the following 2D array format to make all grid like-structures, including the guessing of colours
+  // Display the grid for making guesses
   for (let y = 0; y < CELL_NUMBER; y++) {
     for (let x = 0; x < CELL_NUMBER; x++) {
-      
-      // colours and whatnot can be changed in here
-      fill("blue");
-      rect(x*cellSize, y*cellSize, cellSize, cellSize);
+      rect(x * cellSize, y * cellSize, cellSize, cellSize);
     }
   }
 }
 
-function genGrid() {
-  function generateEmptyGrid(cols, rows) {
-    let newGrid = [];
-    for (let y = 0; y < rows; y++) {
-      newGrid.push([]);
-      for (let x = 0; x < cols; x++) {
-        newGrid[y].push(0);
+function displayGuessGrid() {
+  // Display the guessed colors
+  for (let i = 0; i < CELL_NUMBER; i++) {
+    for (let j = 0; j < CELL_NUMBER; j++) {
+      if (guessGrid[i][j]) {
+        drawCircle(j, i, guessGrid[i][j]);
       }
     }
-    return newGrid;
+  }
+}
+
+function checkGuess() {
+  // Compare the guessed code with the secret code
+  let correctCount = 0;
+  let correctPosition = 0;
+
+  for (let i = 0; i < CELL_NUMBER; i++) {
+    if (guessGrid[CELL_NUMBER - 1][i] === codeToGuess[i]) {
+      correctPosition++;
+    } 
+    else if (codeToGuess.includes(guessGrid[CELL_NUMBER - 1][i])) {
+      correctCount++;
+    }
   }
 
-  // call this somewhere in this function 
-  makeRandomCode();
+  console.log("Correct position: " + correctPosition);
+  console.log("Correct colors: " + correctCount);
+}
+
+function generateEmptyGrid(cols, rows) {
+  let newGrid = [];
+  for (let y = 0; y < rows; y++) {
+    newGrid.push([]);
+    for (let x = 0; x < cols; x++) {
+      newGrid[y].push(0);
+    }
+  }
+  return newGrid;
+}
+
+function displayColours() {
+  // use this function to make a physical colour bank including the eight colours in the colourList
+  // Have the colours be clickable, when clicked the mouse will "hold" the colour and you can then click on a box to assign it the colour as a guess
+  // Have the colour bank be below the mastermind game
 }
