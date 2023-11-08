@@ -11,6 +11,7 @@
 - [Grid neighbours](10-neighbours)
 - [Game of Life](11-life)
 - [Character in Grid](13-character)
+- [SCRAPYARD](12.5-scrapYard)
 
 ## Projects
 - [Scene Assignment](02-scene)

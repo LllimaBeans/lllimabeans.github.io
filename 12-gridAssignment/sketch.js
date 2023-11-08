@@ -3,38 +3,44 @@
 // Date
 //
 // Extra for Experts:
-// HOW DOES ONE MAKE MASTERMIND EXTRA
-// TITLE SCREEN MAYBE???????????
-// Actually yeah title screen might be good
+// uh
 
 let grid;
 let cellSize;
-const CELL_NUMBER = 6;
-let colourList = ["red", "yellow", "green", "blue", "purple", "orange", "pink", "brown"];
+const CELL_NUMBER = 4;
+let colourList = ["red", "yellow", "green", "blue", "purple", "pink", "black", "white"];
 let currentRow = 0;
 let codeToGuess = [];
 let guessGrid = [];
+let maxAttempts = 10;
+let attemptsLeft = maxAttempts;
+let gameWon = false;
+let pegSize = 20;
+let stopFunction = false;
 
+// Setting up the canvas
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  grid = generateEmptyGrid(CELL_NUMBER, CELL_NUMBER);
+  createCanvas(400, 400);
+  grid = genGrid(CELL_NUMBER, attemptsLeft);
 
-  if (height > width) {
-    cellSize = width / CELL_NUMBER;
-  } 
-  else {
-    cellSize = height / CELL_NUMBER;
-  }
+  cellSize = width / CELL_NUMBER;
+
+  makeRandomCode();
+  displayInstructions();
 }
 
+// Displaying the instructions and then the game
 function draw() {
   background(220);
   displayGrid();
   displayGuessGrid();
+  displayAttemptsLeft();
+  displayWinLoseMessage();
 }
 
+// Changing the colour of the box
 function mousePressed() {
-  if (currentRow < CELL_NUMBER) {
+  if (currentRow < CELL_NUMBER && !gameWon) {
     let y = Math.floor(mouseY / cellSize);
     let x = Math.floor(mouseX / cellSize);
 
@@ -43,76 +49,27 @@ function mousePressed() {
 }
 
 function keyPressed() {
-  if (key === " " && currentRow < CELL_NUMBER) {
-    // Enter guess
+  // Entering guess
+  if (key === " " && currentRow < CELL_NUMBER && !gameWon) {
     if (guessGrid[currentRow].length === CELL_NUMBER) {
       currentRow++;
       if (currentRow === CELL_NUMBER) {
         checkGuess();
       }
     }
+  } 
+  // Restarting the game after a win or loss
+  else if (key === "r" && (gameWon || attemptsLeft === 0)) {
+    resetGame();
+  }
+  // Starting the game and hiding instructions
+  else if (key === "s") {
+    stopFunction = !stopFunction;
   }
 }
 
-function changeColour(x, y, row) {
-  // Change colour to what colour of circle the mouse has selected
-  if (x < CELL_NUMBER && y === 0) {
-    guessGrid[row][x] = colourList[0];
-  }
-}
-
-function drawCircle(x, y, colour) {
-  fill(colour);
-  ellipse(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, cellSize);
-}
-
-function makeRandomCode() {
-  // Generate the 4 random colours
-  for (let i = 0; i < CELL_NUMBER; i++) {
-    let randomColor = random(colourList);
-    codeToGuess.push(randomColor);
-  }
-}
-
-function displayGrid() {
-  // Display the grid for making guesses
-  for (let y = 0; y < CELL_NUMBER; y++) {
-    for (let x = 0; x < CELL_NUMBER; x++) {
-      rect(x * cellSize, y * cellSize, cellSize, cellSize);
-    }
-  }
-}
-
-function displayGuessGrid() {
-  // Display the guessed colors
-  for (let i = 0; i < CELL_NUMBER; i++) {
-    for (let j = 0; j < CELL_NUMBER; j++) {
-      if (guessGrid[i][j]) {
-        drawCircle(j, i, guessGrid[i][j]);
-      }
-    }
-  }
-}
-
-function checkGuess() {
-  // Compare the guessed code with the secret code
-  let correctCount = 0;
-  let correctPosition = 0;
-
-  for (let i = 0; i < CELL_NUMBER; i++) {
-    if (guessGrid[CELL_NUMBER - 1][i] === codeToGuess[i]) {
-      correctPosition++;
-    } 
-    else if (codeToGuess.includes(guessGrid[CELL_NUMBER - 1][i])) {
-      correctCount++;
-    }
-  }
-
-  console.log("Correct position: " + correctPosition);
-  console.log("Correct colors: " + correctCount);
-}
-
-function generateEmptyGrid(cols, rows) {
+// Making the grid to use
+function genGrid(cols, rows) {
   let newGrid = [];
   for (let y = 0; y < rows; y++) {
     newGrid.push([]);
@@ -123,8 +80,127 @@ function generateEmptyGrid(cols, rows) {
   return newGrid;
 }
 
-function displayColours() {
-  // use this function to make a physical colour bank including the eight colours in the colourList
-  // Have the colours be clickable, when clicked the mouse will "hold" the colour and you can then click on a box to assign it the colour as a guess
-  // Have the colour bank be below the mastermind game
+// Changing the colour where mouse is
+function changeColour(x, y, row) {
+  if (x < CELL_NUMBER && y === 0) {
+    guessGrid[row][x] = colourList[0];
+  }
 }
+
+// Drawing in a central position in the boxes
+function drawPeg(x, y, colour) {
+  fill(colour);
+  ellipse(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, pegSize, pegSize);
+}
+
+// Generating a random colour code to guess
+function makeRandomCode() {
+  for (let i = 0; i < CELL_NUMBER; i++) {
+    let randomColor = random(colourList);
+    codeToGuess.push(randomColor);
+  }
+}
+
+// Making brown boxes for game
+function displayGrid() {
+  for (let y = 0; y < CELL_NUMBER; y++) {
+    for (let x = 0; x < CELL_NUMBER; x++) {
+      drawPeg(x, y, "lightbrown");
+    }
+  }
+}
+
+// Show instructions, and then show the game
+function displayGuessGrid() {
+  if (stopFunction === false) {
+    displayInstructions();
+  }
+  else {
+    for (let i = 0; i < CELL_NUMBER; i++) {
+      for (let j = 0; j < CELL_NUMBER; j++) {
+        drawPeg(j, i, guessGrid[i][j]);
+      }
+    }
+  }
+}
+
+// How many tries remain
+function displayAttemptsLeft() {
+  textSize(24);
+  fill(0);
+  text(`Attempts Left: ${attemptsLeft}`, 10, height - 20);
+}
+
+// Checking if the guess is right or partically right
+function checkGuess() {
+  let correctCount = 0;
+  let correctPosition = 0;
+
+  // Are the colours correct
+  for (let i = 0; i < CELL_NUMBER; i++) {
+    // Is position of colour correct
+    if (guessGrid[CELL_NUMBER - 1][i] === codeToGuess[i]) {
+      correctPosition++;
+    } 
+    // If colour in the code, but wrong spot
+    else if (codeToGuess.includes(guessGrid[CELL_NUMBER - 1][i])) {
+      correctCount++;
+    }
+  }
+
+  // If game is won or lost
+  if (correctPosition === CELL_NUMBER) {
+    gameWon = true;
+  } 
+  else {
+    attemptsLeft--;
+    if (attemptsLeft === 0) {
+      gameWon = false;
+    }
+  }
+}
+
+// Message to say if you've won or lost
+function displayWinLoseMessage() {
+  textSize(32);
+  fill(0);
+
+  if (gameWon) {
+    text("Congratulations! You've won!", 10, 40);
+    text("Press 'R' to restart.", 10, 80);
+  } 
+  else if (attemptsLeft === 0) {
+    text("You've run out of attempts.", 10, 40);
+    text("The secret code was:", 10, 80);
+
+    for (let i = 0; i < CELL_NUMBER; i++) {
+      drawPeg(i, CELL_NUMBER - 1, codeToGuess[i]);
+    }
+    text("Press 'R' to restart.", 10, height - 60);
+  }
+}
+
+// Restart the game when r is pressed
+function resetGame() {
+  currentRow = 0;
+  codeToGuess = [];
+  guessGrid = [];
+  attemptsLeft = maxAttempts;
+  gameWon = false;
+  makeRandomCode();
+  displayInstructions();
+}
+
+// Display rules to play the game
+function displayInstructions() {
+  textSize(16);
+  fill(0);
+  text("Mastermind Game", 10, 10);
+  text("Click on the circles to select colors for your guess.", 10, 30);
+  text("Press SPACE to submit your guess.", 10, 50);
+  text("Press 'R' to restart the game.", 10, 70);
+  if (stopFunction) {
+    return;
+  }
+}
+
