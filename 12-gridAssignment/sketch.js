@@ -30,7 +30,8 @@ function setup() {
   // size of board
   if (height > width) {
     cellSize = width / BOARD_SIZE;
-  } else {
+  } 
+  else {
     cellSize = height / BOARD_SIZE;
   }
 }
@@ -50,12 +51,14 @@ function mousePressed() {
     if (isValidChecker(x, y)) {
       selectedChecker = { x, y };
     }
-  } else {
+  } 
+  else {
     // if a checker is selected, try move it to clicked position
     if (isValidMove(selectedChecker.x, selectedChecker.y, x, y)) {
       moveChecker(selectedChecker.x, selectedChecker.y, x, y);
       selectedChecker = null;
-    } else {
+    } 
+    else {
       // if the move isnt valid, deselect the checker
       selectedChecker = null; 
     }
@@ -66,7 +69,7 @@ function isValidChecker(x, y) {
   // checking if there is in fact a checker where you click
   return (
     board[y][x] !== 0 &&
-    ((currentPlayer === 1 && board[y][x] === 1) || (currentPlayer === -1 && board[y][x] === -1))
+    (currentPlayer === 1 && board[y][x] === 1 || currentPlayer === -1 && board[y][x] === -1)
   );
 }
 
@@ -114,7 +117,8 @@ function displayBoard() {
       if ((x + y) % 2 === 0) {
         // empty white sqaure
         fill("white");
-      } else {
+      } 
+      else {
         // dark square
         fill("darkgrey");
       }
@@ -139,7 +143,8 @@ function generateCheckerboard(cols, rows) {
       if ((x + y) % 2 === 0) {
         // empty white square
         newBoard[y].push(0);
-      } else {
+      } 
+      else {
         // empty dark square
         newBoard[y].push(0);
       }
@@ -159,7 +164,8 @@ function placeCheckers(board) {
           // red checker in the top rows
         }
       }
-    } else if (y >= BOARD_SIZE - 2) {
+    } 
+    else if (y >= BOARD_SIZE - 2) {
       if ((y + 1) % 2 === 0) {
         for (let x = 1; x < BOARD_SIZE; x += 2) {
           board[y][x] = 1; 

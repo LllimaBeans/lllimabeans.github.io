@@ -12,6 +12,8 @@
 - [Game of Life](11-life)
 - [Character in Grid](13-character)
 - [SCRAPYARD](12.5-scrapYard)
+- [Dog OOP Demo](14-dog)
+- [Walker OOP Demo](15-walker)
 
 ## Projects
 - [Scene Assignment](02-scene)
