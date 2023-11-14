@@ -1,206 +1,172 @@
-// Mastermind
+// Checkers
 // Laura Lima
-// Date
+// Monday November 13th
 //
-// Extra for Experts:
-// uh
+// This is basically just a mediocre checkers board
+// White moves first, you have to click the checker first and then
+// click to where you're moving it
+// It should only move one square diagonally at a time, unless capturing a piece
+// I couldn't figure out the right movement of the checkers at first
+// so I had chat gpt help with the logic of that, so if that code looks 
+// a bit weird it's probably that
 
-let grid;
+// Extra for experts: 
+// I think the only actual new thing I've used was assigning "null" to a variable
+// So just that I think. I'm writing this note after doing everything
+// so I may nave forgot about something 
+
+let board;
+const BOARD_SIZE = 8;
 let cellSize;
-const CELL_NUMBER = 4;
-let colourList = ["red", "yellow", "green", "blue", "purple", "pink", "black", "white"];
-let currentRow = 0;
-let codeToGuess = [];
-let guessGrid = [];
-let maxAttempts = 10;
-let attemptsLeft = maxAttempts;
-let gameWon = false;
-let pegSize = 20;
-let stopFunction = false;
+let currentPlayer = 1; 
+// 1 is white player and -1 is red player
+let selectedChecker = null;
 
-// Setting up the canvas
 function setup() {
-  createCanvas(400, 400);
-  grid = genGrid(CELL_NUMBER, attemptsLeft);
+  createCanvas(windowWidth, windowHeight);
+  board = generateCheckerboard(BOARD_SIZE, BOARD_SIZE);
+  placeCheckers(board);
 
-  cellSize = width / CELL_NUMBER;
-
-  makeRandomCode();
-  displayInstructions();
+  // size of board
+  if (height > width) {
+    cellSize = width / BOARD_SIZE;
+  } else {
+    cellSize = height / BOARD_SIZE;
+  }
 }
 
-// Displaying the instructions and then the game
 function draw() {
   background(220);
-  displayGrid();
-  displayGuessGrid();
-  displayAttemptsLeft();
-  displayWinLoseMessage();
+  displayBoard();
 }
 
-// Changing the colour of the box
 function mousePressed() {
-  if (currentRow < CELL_NUMBER && !gameWon) {
-    let y = Math.floor(mouseY / cellSize);
-    let x = Math.floor(mouseX / cellSize);
+  // getting mouse location in regards to cell
+  let y = Math.floor(mouseY / cellSize);
+  let x = Math.floor(mouseX / cellSize);
 
-    changeColour(x, y, currentRow);
+  if (selectedChecker === null) {
+    // if there isn't any checker selected, check if there's a checker where the mouse is clicked
+    if (isValidChecker(x, y)) {
+      selectedChecker = { x, y };
+    }
+  } else {
+    // if a checker is selected, try move it to clicked position
+    if (isValidMove(selectedChecker.x, selectedChecker.y, x, y)) {
+      moveChecker(selectedChecker.x, selectedChecker.y, x, y);
+      selectedChecker = null;
+    } else {
+      // if the move isnt valid, deselect the checker
+      selectedChecker = null; 
+    }
   }
 }
 
-function keyPressed() {
-  // Entering guess
-  if (key === " " && currentRow < CELL_NUMBER && !gameWon) {
-    if (guessGrid[currentRow].length === CELL_NUMBER) {
-      currentRow++;
-      if (currentRow === CELL_NUMBER) {
-        checkGuess();
+function isValidChecker(x, y) {
+  // checking if there is in fact a checker where you click
+  return (
+    board[y][x] !== 0 &&
+    ((currentPlayer === 1 && board[y][x] === 1) || (currentPlayer === -1 && board[y][x] === -1))
+  );
+}
+
+function isValidMove(startX, startY, endX, endY) {
+  // is the move valid in the rules of chess
+  let dx = endX - startX;
+  let dy = endY - startY;
+
+  // Regular move
+  if (Math.abs(dx) === 1 && Math.abs(dy) === 1 && board[endY][endX] === 0) {
+    return true;
+  }
+
+  // jumping over opponents checker diagonally and killing it
+  if (
+    Math.abs(dx) === 2 &&
+    Math.abs(dy) === 2 &&
+    board[endY][endX] === 0 &&
+    board[startY + dy / 2][startX + dx / 2] === -currentPlayer
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function moveChecker(startX, startY, endX, endY) {
+  // moving checker to clicked position 
+  board[endY][endX] = board[startY][startX];
+  board[startY][startX] = 0;
+
+  // the removing of the opponents checker in a capture
+  let dx = endX - startX;
+  let dy = endY - startY;
+  if (Math.abs(dx) === 2 && Math.abs(dy) === 2) {
+    board[startY + dy / 2][startX + dx / 2] = 0;
+  }
+
+  currentPlayer *= -1; // Switch player turn
+}
+
+function displayBoard() {
+  for (let y = 0; y < BOARD_SIZE; y++) {
+    for (let x = 0; x < BOARD_SIZE; x++) {
+      if ((x + y) % 2 === 0) {
+        // empty white sqaure
+        fill("white");
+      } else {
+        // dark square
+        fill("darkgrey");
+      }
+
+      rect(x * cellSize, y * cellSize, cellSize, cellSize);
+
+      if (board[y][x] !== 0) {
+        // checker
+        fill(board[y][x] === 1 ? "white" : "red");
+        stroke("black");
+        ellipse(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, cellSize);
       }
     }
-  } 
-  // Restarting the game after a win or loss
-  else if (key === "r" && (gameWon || attemptsLeft === 0)) {
-    resetGame();
-  }
-  // Starting the game and hiding instructions
-  else if (key === "s") {
-    stopFunction = !stopFunction;
   }
 }
 
-// Making the grid to use
-function genGrid(cols, rows) {
-  let newGrid = [];
+function generateCheckerboard(cols, rows) {
+  let newBoard = [];
   for (let y = 0; y < rows; y++) {
-    newGrid.push([]);
+    newBoard.push([]);
     for (let x = 0; x < cols; x++) {
-      newGrid[y].push(0);
+      if ((x + y) % 2 === 0) {
+        // empty white square
+        newBoard[y].push(0);
+      } else {
+        // empty dark square
+        newBoard[y].push(0);
+      }
     }
   }
-  return newGrid;
+  return newBoard;
 }
 
-// Changing the colour where mouse is
-function changeColour(x, y, row) {
-  if (x < CELL_NUMBER && y === 0) {
-    guessGrid[row][x] = colourList[0];
-  }
-}
-
-// Drawing in a central position in the boxes
-function drawPeg(x, y, colour) {
-  fill(colour);
-  ellipse(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, pegSize, pegSize);
-}
-
-// Generating a random colour code to guess
-function makeRandomCode() {
-  for (let i = 0; i < CELL_NUMBER; i++) {
-    let randomColor = random(colourList);
-    codeToGuess.push(randomColor);
-  }
-}
-
-// Making brown boxes for game
-function displayGrid() {
-  for (let y = 0; y < CELL_NUMBER; y++) {
-    for (let x = 0; x < CELL_NUMBER; x++) {
-      drawPeg(x, y, "lightbrown");
-    }
-  }
-}
-
-// Show instructions, and then show the game
-function displayGuessGrid() {
-  if (stopFunction === false) {
-    displayInstructions();
-  }
-  else {
-    for (let i = 0; i < CELL_NUMBER; i++) {
-      for (let j = 0; j < CELL_NUMBER; j++) {
-        drawPeg(j, i, guessGrid[i][j]);
+function placeCheckers(board) {
+  // place checkers on the dark squares in the top two and bottom two rows
+  for (let y = 0; y < BOARD_SIZE; y++) {
+    if (y < 2) {
+      if (y % 2 === 0) {
+        for (let x = 0; x < BOARD_SIZE; x += 2) {
+          board[y][x] = -1; 
+          board[y + 1][x + 1] = -1; 
+          // red checker in the top rows
+        }
+      }
+    } else if (y >= BOARD_SIZE - 2) {
+      if ((y + 1) % 2 === 0) {
+        for (let x = 1; x < BOARD_SIZE; x += 2) {
+          board[y][x] = 1; 
+          board[y - 1][x - 1] = 1; 
+          // white checker in the bottom rows
+        }
       }
     }
   }
 }
-
-// How many tries remain
-function displayAttemptsLeft() {
-  textSize(24);
-  fill(0);
-  text(`Attempts Left: ${attemptsLeft}`, 10, height - 20);
-}
-
-// Checking if the guess is right or partically right
-function checkGuess() {
-  let correctCount = 0;
-  let correctPosition = 0;
-
-  // Are the colours correct
-  for (let i = 0; i < CELL_NUMBER; i++) {
-    // Is position of colour correct
-    if (guessGrid[CELL_NUMBER - 1][i] === codeToGuess[i]) {
-      correctPosition++;
-    } 
-    // If colour in the code, but wrong spot
-    else if (codeToGuess.includes(guessGrid[CELL_NUMBER - 1][i])) {
-      correctCount++;
-    }
-  }
-
-  // If game is won or lost
-  if (correctPosition === CELL_NUMBER) {
-    gameWon = true;
-  } 
-  else {
-    attemptsLeft--;
-    if (attemptsLeft === 0) {
-      gameWon = false;
-    }
-  }
-}
-
-// Message to say if you've won or lost
-function displayWinLoseMessage() {
-  textSize(32);
-  fill(0);
-
-  if (gameWon) {
-    text("Congratulations! You've won!", 10, 40);
-    text("Press 'R' to restart.", 10, 80);
-  } 
-  else if (attemptsLeft === 0) {
-    text("You've run out of attempts.", 10, 40);
-    text("The secret code was:", 10, 80);
-
-    for (let i = 0; i < CELL_NUMBER; i++) {
-      drawPeg(i, CELL_NUMBER - 1, codeToGuess[i]);
-    }
-    text("Press 'R' to restart.", 10, height - 60);
-  }
-}
-
-// Restart the game when r is pressed
-function resetGame() {
-  currentRow = 0;
-  codeToGuess = [];
-  guessGrid = [];
-  attemptsLeft = maxAttempts;
-  gameWon = false;
-  makeRandomCode();
-  displayInstructions();
-}
-
-// Display rules to play the game
-function displayInstructions() {
-  textSize(16);
-  fill(0);
-  text("Mastermind Game", 10, 10);
-  text("Click on the circles to select colors for your guess.", 10, 30);
-  text("Press SPACE to submit your guess.", 10, 50);
-  text("Press 'R' to restart the game.", 10, 70);
-  if (stopFunction) {
-    return;
-  }
-}
-
