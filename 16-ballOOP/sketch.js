@@ -61,7 +61,7 @@ function draw() {
       }
       someBall.display();
     }
-}
+  }
 }
 
 function mousePressed() {
