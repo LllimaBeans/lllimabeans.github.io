@@ -8,10 +8,15 @@ function setup() {
 
 function draw() {
   background(220);
+  // draw lines first
   for (let point of points) {
-    point.update();
-    point.display();
     point.connectTo(points);
+    point.update();
+  }
+
+  // then draw circles, to hide lines
+  for (let point of points) {
+    point.display();
   }
 }
 
@@ -29,7 +34,7 @@ class MovingPoint {
     this.xTime = random(1000);
     this.yTime = random(1000);
     this.deltaTime = 0.01;
-    this.reach = 150;
+    this.reach = 1500;
   } 
   
   display() {
@@ -61,6 +66,18 @@ class MovingPoint {
     }
     if (this.y > height) {
       this.y -= height;
+    }
+
+    // adjust based on mouse
+    let mouseDist = dist(this.x, this.y, mouseX, mouseY);
+    if (mouseDist < this.reach) {
+      // make circle bigger
+      let theSize = map(mouseDist, 0, this.reach, 130, 15);
+      this.radius = theSize;
+    }
+    else {
+      // make regular
+      this.radius = 15;
     }
   }
 
