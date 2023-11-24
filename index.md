@@ -17,6 +17,7 @@
 - [Ball OOP](16-ballOOP)
 - [Connected Ball OOP](17-nodes)
 - [FireWorks](18-fireworks)
+- [Inheritance](19-inher)
 
 ## Projects
 - [Scene Assignment](02-scene)
