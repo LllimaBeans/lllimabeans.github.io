@@ -19,6 +19,7 @@
 - [FireWorks](18-fireworks)
 - [Inheritance](19-inher)
 - [collidw](20-collision)
+- [pplay](21-play)
 
 ## Projects
 - [Scene Assignment](02-scene)
